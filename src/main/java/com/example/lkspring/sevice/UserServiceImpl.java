@@ -17,12 +17,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(User user) {
         //user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setPassword(user.getPassword());
+        user.setMiddleAttempt(0d);
         userRepository.save(user);
     }
 
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public User findByUsernameAndPassword(String username, String password) {
+        return userRepository.findByUsernameAndPassword(username, password);
     }
 }

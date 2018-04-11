@@ -29,12 +29,26 @@ public class RegisterController {
 
     @RequestMapping(value = "/registerProcess", method = RequestMethod.POST)
     public ModelAndView register(@ModelAttribute("userForm") User userForm, BindingResult errors) {
-       userValidator.validate(userForm, errors);
+        userValidator.validate(userForm, errors);
         if (errors.hasErrors()) {
             return new ModelAndView("register");
         }
         userService.save(userForm);
-        return new ModelAndView("home", "username", userForm.getUsername());
+        return new ModelAndView("home", "user", userForm);
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login(Model model) {
+        model.addAttribute("userFrom", new User());
+        return "login";
+    }
+
+    @RequestMapping(value = "/loginProcess", method = RequestMethod.POST)
+    public ModelAndView login(@ModelAttribute("userForm") User userForm) {
+        User checkUser = userService.findByUsernameAndPassword(userForm.getUsername(), userForm.getPassword());
+        if (checkUser == null)
+            return new ModelAndView("loginProcess", "error_message", "login or password are incorrect");
+        return new ModelAndView("home", "user", checkUser);
     }
 }
 
