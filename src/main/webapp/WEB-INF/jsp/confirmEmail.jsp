@@ -1,0 +1,1 @@
+<h1>${user.username}, please, confirm your email</h1>

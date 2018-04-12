@@ -14,6 +14,17 @@ public class User {
     private String confirmPassword;
     private Double middleAttempt;
 
+    @Column(name = "token")
+    private String confirmationToken;
+
+    public String getConfirmationToken() {
+        return confirmationToken;
+    }
+
+    public void setConfirmationToken(String confirmationToken) {
+        this.confirmationToken = confirmationToken;
+    }
+
     public boolean isEnable() {
         return enable;
     }

@@ -46,3 +46,6 @@ hs_err_pid*
 /dist/
 /nbdist/
 /.nb-gradle/
+
+#email password and address
+application.properties
