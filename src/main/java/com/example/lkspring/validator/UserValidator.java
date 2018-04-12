@@ -9,6 +9,9 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+
 @Component
 public class UserValidator implements Validator {
     @Autowired
@@ -29,6 +32,15 @@ public class UserValidator implements Validator {
         if (userService.findByUsername(user.getUsername()) != null) {
             errors.rejectValue("username", "Duplicate.userForm.username");
         }
+        try {
+            var emailAddress = new InternetAddress(user.getEmail());
+            emailAddress.validate();
+        } catch (AddressException e) {
+            errors.rejectValue("email", "this email is not correct, or not exist");
+        }
+        if(userService.findByEmail(user.getEmail())!=null){
+            errors.rejectValue("email", "this email has been already registered");
+        }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
         if (user.getPassword().length() < 6 || user.getPassword().length() > 32) {
@@ -36,7 +48,7 @@ public class UserValidator implements Validator {
         }
 
         if (!user.getConfirmPassword().equals(user.getPassword())) {
-            errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");
+            errors.rejectValue("confirmPassword", "Diff.userForm.confirmPassword");
         }
     }
 }

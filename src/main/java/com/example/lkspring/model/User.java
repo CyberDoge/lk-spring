@@ -7,13 +7,20 @@ import javax.persistence.*;
 public class User {
     private Long id;
 
-
+    private boolean enable;
     private String username;
+    private String email;
     private String password;
-
     private String confirmPassword;
     private Double middleAttempt;
 
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,6 +38,15 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Column(name = "email", nullable = false, unique = true)
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

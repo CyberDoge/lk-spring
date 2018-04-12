@@ -6,7 +6,7 @@
 
 </head>
 
-<form action="/loginProcess"  modelAttribute="userForm" method="post" style="border:1px solid #ccc">
+<form action="/home"  modelAttribute="userForm" method="post" style="border:1px solid #ccc">
     <div class="container">
         <h1>Sign Ip</h1>
         <p>Enter to your account.</p>

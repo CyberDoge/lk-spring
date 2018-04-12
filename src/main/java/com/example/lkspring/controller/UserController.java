@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 
 @Controller
-public class RegisterController {
+public class UserController {
     @Autowired
     UserValidator userValidator;
     @Autowired
@@ -27,11 +27,11 @@ public class RegisterController {
         return "register";
     }
 
-    @RequestMapping(value = "/registerProcess", method = RequestMethod.POST)
+    @RequestMapping(value = "/home", method = RequestMethod.POST)
     public ModelAndView register(@ModelAttribute("userForm") User userForm, BindingResult errors) {
         userValidator.validate(userForm, errors);
         if (errors.hasErrors()) {
-            return new ModelAndView("register");
+            return new ModelAndView("register", "errors", errors);
         }
         userService.save(userForm);
         return new ModelAndView("home", "user", userForm);
@@ -43,11 +43,11 @@ public class RegisterController {
         return "login";
     }
 
-    @RequestMapping(value = "/loginProcess", method = RequestMethod.POST)
+    @RequestMapping(value = "/home", method = RequestMethod.POST)
     public ModelAndView login(@ModelAttribute("userForm") User userForm) {
         User checkUser = userService.findByUsernameAndPassword(userForm.getUsername(), userForm.getPassword());
         if (checkUser == null)
-            return new ModelAndView("loginProcess", "error_message", "login or password are incorrect");
+            return new ModelAndView("login", "error_message", "login or password are incorrect");
         return new ModelAndView("home", "user", checkUser);
     }
 }
