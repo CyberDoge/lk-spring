@@ -22,7 +22,7 @@ import java.util.UUID;
 
 
 @Controller
-public class UserController {
+public class RegisterController {
     @Autowired
     UserValidator userValidator;
     @Autowired
@@ -34,12 +34,11 @@ public class UserController {
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String register(Model model) {
         model.addAttribute("userForm", new User());
-            return "register";
+        return "register";
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/confirmEmail", method = RequestMethod.POST)
     public ModelAndView register(ModelAndView modelAndView, @ModelAttribute("userForm") User userForm, BindingResult errors, HttpServletRequest request) {
-        System.out.println("---------registered-------------");
         userValidator.validate(userForm, errors);
         if (errors.hasErrors()) {
             modelAndView.addObject("errors", errors);
@@ -47,12 +46,11 @@ public class UserController {
             return modelAndView;
         }
 
-        // Generate random 36-character string token for confirmation link
         userForm.setConfirmationToken(UUID.randomUUID().toString());
 
         userService.save(userForm);
 
-        String appUrl = request.getScheme() + "://" + request.getServerName();
+        String appUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getLocalPort();
 
 
         SimpleMailMessage registrationEmail = new SimpleMailMessage();
@@ -61,19 +59,14 @@ public class UserController {
         registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
                 + appUrl + "/confirm?token=" + userForm.getConfirmationToken());
 
-        //todo
-        registrationEmail.setFrom("apleodelva@gmail.com");
-
         emailService.sendEmail(registrationEmail);
-        System.out.println("---------registered-------------");
-        System.out.println(registrationEmail.toString());
         modelAndView.setViewName("confirmEmail");
         modelAndView.addObject("user", userForm);
         return modelAndView;
     }
 
 
-    @RequestMapping(value="/confirm", method = RequestMethod.GET)
+    @RequestMapping(value = "/confirm", method = RequestMethod.GET)
     public ModelAndView showConfirmationPage(ModelAndView modelAndView, @RequestParam("token") String token) {
 
         User user = userService.findByConfirmationToken(token);
@@ -84,25 +77,13 @@ public class UserController {
             return modelAndView;
         } else {
             user.setEnable(true);
-                modelAndView.addObject("user", user);
+            modelAndView.addObject("user", user);
             userService.save(user);
         }
         modelAndView.setViewName("home");
         return modelAndView;
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login(Model model) {
-        model.addAttribute("userFrom", new User());
-        return "login";
-    }
 
-    @RequestMapping(value = "/home", method = RequestMethod.POST)
-    public ModelAndView login(@ModelAttribute("userForm") User userForm) {
-        User checkUser = userService.findByUsernameAndPassword(userForm.getUsername(), userForm.getPassword());
-        if (checkUser == null)
-            return new ModelAndView("login", "error_message", "login or password are incorrect");
-        return new ModelAndView("home", "user", checkUser);
-    }
 }
 

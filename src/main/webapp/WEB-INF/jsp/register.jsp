@@ -9,7 +9,7 @@
 
 </head>
 
-<form:form action="/register"  modelAttribute="userForm" method="post" style="border:1px solid #ccc">
+<form:form action="/confirmEmail"  modelAttribute="userForm" method="post" style="border:1px solid #ccc">
 
         <h1>Sign Up</h1>
         <p>Please fill in this form to create an account.</p>

@@ -14,9 +14,9 @@ public class User {
     private String confirmPassword;
     private Double middleAttempt;
 
-    @Column(name = "confirmationToken")
     private String confirmationToken;
 
+    @Column(name = "confirmation_token")
     public String getConfirmationToken() {
         return confirmationToken;
     }
@@ -25,6 +25,7 @@ public class User {
         this.confirmationToken = confirmationToken;
     }
 
+    @Column(columnDefinition = "TINYINT", length = 1)
     public boolean isEnable() {
         return enable;
     }
@@ -77,6 +78,7 @@ public class User {
         this.confirmPassword = confirmPassword;
     }
 
+    @Column(name = "middle_attempt")
     public Double getMiddleAttempt() {
         return middleAttempt;
     }
