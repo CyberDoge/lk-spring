@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.UUID;
 
 
@@ -34,36 +34,42 @@ public class UserController {
     @RequestMapping(value = "/register", method = RequestMethod.GET)
     public String register(Model model) {
         model.addAttribute("userForm", new User());
-        return "register";
+            return "register";
     }
 
-    @RequestMapping(value = "/home", method = RequestMethod.POST)
-    public ModelAndView register(@ModelAttribute("userForm") User user, BindingResult errors, HttpServletRequest request) {
-        userValidator.validate(user, errors);
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ModelAndView register(ModelAndView modelAndView, @ModelAttribute("userForm") User userForm, BindingResult errors, HttpServletRequest request) {
+        System.out.println("---------registered-------------");
+        userValidator.validate(userForm, errors);
         if (errors.hasErrors()) {
-            return new ModelAndView("register", "errors", errors);
+            modelAndView.addObject("errors", errors);
+            modelAndView.setViewName("register");
+            return modelAndView;
         }
 
         // Generate random 36-character string token for confirmation link
-        user.setConfirmationToken(UUID.randomUUID().toString());
+        userForm.setConfirmationToken(UUID.randomUUID().toString());
 
-        userService.save(user);
+        userService.save(userForm);
 
         String appUrl = request.getScheme() + "://" + request.getServerName();
 
 
         SimpleMailMessage registrationEmail = new SimpleMailMessage();
-        registrationEmail.setTo(user.getEmail());
+        registrationEmail.setTo(userForm.getEmail());
         registrationEmail.setSubject("Registration Confirmation");
         registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
-                + appUrl + "/confirm?token=" + user.getConfirmationToken());
+                + appUrl + "/confirm?token=" + userForm.getConfirmationToken());
 
         //todo
         registrationEmail.setFrom("apleodelva@gmail.com");
 
         emailService.sendEmail(registrationEmail);
-
-        return new ModelAndView("confirmEmail", "user", user);
+        System.out.println("---------registered-------------");
+        System.out.println(registrationEmail.toString());
+        modelAndView.setViewName("confirmEmail");
+        modelAndView.addObject("user", userForm);
+        return modelAndView;
     }
 
 
@@ -78,7 +84,7 @@ public class UserController {
             return modelAndView;
         } else {
             user.setEnable(true);
-            modelAndView.addObject("user", user);
+                modelAndView.addObject("user", user);
             userService.save(user);
         }
         modelAndView.setViewName("home");

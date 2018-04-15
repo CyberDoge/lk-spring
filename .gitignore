@@ -15,6 +15,7 @@
 *.iws
 *.iml
 *.ipr
+/.mvn/
 
 # Compiled class file
 *.class
@@ -47,5 +48,7 @@ hs_err_pid*
 /nbdist/
 /.nb-gradle/
 
+
 #email password and address
 application.properties
+/lk-spring/src/main/resources/application.properties

@@ -1,4 +1,7 @@
-<html>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>register</title>
     <link href="css/register.css"
@@ -6,8 +9,8 @@
 
 </head>
 
-<form action="/home"  modelAttribute="userForm" method="post" style="border:1px solid #ccc">
-    <div class="container">
+<form:form action="/register"  modelAttribute="userForm" method="post" style="border:1px solid #ccc">
+
         <h1>Sign Up</h1>
         <p>Please fill in this form to create an account.</p>
         <hr>
@@ -23,7 +26,7 @@
         <input type="password" placeholder="Enter Password" name="password" id="password" required>
 
         <label for="confirmPassword"><b>Confirm Password</b></label>
-        <input type="password" placeholder="Confirm Password" name="confirmPassword" id = "confirmPassword" required>
+        <input type="password" placeholder="Confirm Password" name="confirmPassword" id="confirmPassword" required>
 
         <label>
             <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
@@ -36,7 +39,7 @@
             <button type="submit" class="signupbtn">Sign Up</button>
         </div>
     </div>
-</form>
+</form:form>
 
 </body>
 </html>

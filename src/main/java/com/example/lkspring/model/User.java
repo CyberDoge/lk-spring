@@ -14,7 +14,7 @@ public class User {
     private String confirmPassword;
     private Double middleAttempt;
 
-    @Column(name = "token")
+    @Column(name = "confirmationToken")
     private String confirmationToken;
 
     public String getConfirmationToken() {

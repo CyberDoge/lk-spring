@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Component("javasampleapproachMailSender")
+//@Component("emailService")
 @Service("emailService")
 public class EmailService {
 

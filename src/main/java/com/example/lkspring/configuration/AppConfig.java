@@ -1,20 +1,24 @@
 package com.example.lkspring.configuration;
 
-import com.example.lkspring.sevice.EmailService;
-import com.example.lkspring.sevice.UserService;
-import com.example.lkspring.sevice.UserServiceImpl;
-import com.example.lkspring.validator.UserValidator;
 import org.springframework.context.annotation.Bean;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
-
-import java.util.Properties;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
-@Controller
-public class AppConfig {
+@Configuration
+public class AppConfig implements WebMvcConfigurer {
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        return bCryptPasswordEncoder;
+    }
+
+}
+
+
+/* {
     @Bean
     UserService userService() {
         return new UserServiceImpl();
@@ -28,7 +32,7 @@ public class AppConfig {
     EmailService emailService(){
         return new EmailService();
     }
-  /*  @Bean
+    @Bean
     JavaMailSender mailSender(){
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
@@ -44,7 +48,7 @@ public class AppConfig {
         props.put("mail.debug", "true");
 
         return mailSender;    }
-*/
+
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -52,3 +56,4 @@ public class AppConfig {
     }
 
 }
+*/
