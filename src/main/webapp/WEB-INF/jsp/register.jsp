@@ -8,12 +8,21 @@
           rel="stylesheet">
 
 </head>
+<h1>Sign Up</h1>
+<p>Please fill in this form to create an account.</p>
+<hr>
 
-<form:form action="/confirmEmail"  modelAttribute="userForm" method="post" style="border:1px solid #ccc">
+<%--
+<ul>
+    <c:forEach var="errorElement" items="${errors}">
+        <li>${errorElement.getCode()}</li>
+    </c:forEach>
+</ul>
+--%>
 
-        <h1>Sign Up</h1>
-        <p>Please fill in this form to create an account.</p>
-        <hr>
+<form:form modelAttribute="userForm" method="post" style="border:1px solid #ccc">
+
+
 
         <label for="username"><b>login</b></label>
         <input type="text" placeholder="Enter login" name="username" id="username" required>

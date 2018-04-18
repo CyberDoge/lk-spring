@@ -39,6 +39,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email);
     }
 
+
     @Override
     public User findByConfirmationToken(String token) {
         return userRepository.findByConfirmationToken(token);

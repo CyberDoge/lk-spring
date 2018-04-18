@@ -8,16 +8,21 @@ import com.example.lkspring.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -32,16 +37,20 @@ public class RegisterController {
 
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
-    public String register(Model model) {
-        model.addAttribute("userForm", new User());
+    public String register(ModelAndView model, HttpServletRequest redirectAttributes) {
+        model.addObject("userForm", new User());
+        Enumeration<String> reqEnum = redirectAttributes.getParameterNames();
         return "register";
     }
 
-    @RequestMapping(value = "/confirmEmail", method = RequestMethod.POST)
-    public ModelAndView register(ModelAndView modelAndView, @ModelAttribute("userForm") User userForm, BindingResult errors, HttpServletRequest request) {
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ModelAndView register(ModelAndView modelAndView, @ModelAttribute("userForm") @Valid User userForm, BindingResult errors, HttpServletRequest request, RedirectAttributes redir) {
         userValidator.validate(userForm, errors);
         if (errors.hasErrors()) {
-            modelAndView.addObject("errors", errors);
+            List<String> erList = new ArrayList(errors.getErrorCount());
+            for (ObjectError e : errors.getAllErrors()) {
+                erList.add(e.getCode());
+            }
             modelAndView.setViewName("register");
             return modelAndView;
         }
@@ -60,9 +69,13 @@ public class RegisterController {
                 + appUrl + "/confirm?token=" + userForm.getConfirmationToken());
 
         emailService.sendEmail(registrationEmail);
-        modelAndView.setViewName("confirmEmail");
-        modelAndView.addObject("user", userForm);
+        modelAndView.setViewName("redirect:/confirmEmail");
+        redir.addFlashAttribute("user", userForm);
         return modelAndView;
+    }
+    @RequestMapping(value = "/confirmEmail", method = RequestMethod.GET)
+    public ModelAndView redirectToConfirmPage(@Valid User userForm){
+        return new ModelAndView("confirmEmail", "user", userForm);
     }
 
 
