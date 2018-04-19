@@ -1,7 +1,8 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+>
 <head>
     <title>register</title>
     <link href="css/register.css"
@@ -13,16 +14,18 @@
 <hr>
 
 <%--
-<ul>
-    <c:forEach var="errorElement" items="${errors}">
-        <li>${errorElement.getCode()}</li>
-    </c:forEach>
-</ul>
+
 --%>
 
 <form:form modelAttribute="userForm" method="post" style="border:1px solid #ccc">
 
-
+    <c:if test="${not empty errors}">
+    <ul>
+        <c:forEach var="errorElement" items="${errors.getAllErrors()}">
+            <li>${errorElement.getCode()}</li>
+        </c:forEach>
+    </ul>
+    </c:if>
 
         <label for="username"><b>login</b></label>
         <input type="text" placeholder="Enter login" name="username" id="username" required>

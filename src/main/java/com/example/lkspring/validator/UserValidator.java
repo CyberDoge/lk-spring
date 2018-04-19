@@ -27,10 +27,10 @@ public class UserValidator implements Validator {
         User user = (User)target;
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
         if (user.getUsername().length() < 2 || user.getUsername().length() > 32) {
-            errors.rejectValue("username", "Size.userForm.username");
+            errors.rejectValue("username", "username have to be longer then 6 and shorter then 32");
         }
         if (userService.findByUsername(user.getUsername()) != null) {
-            errors.rejectValue("username", "Duplicate.userForm.username");
+            errors.rejectValue("username", "user with this username is already exist");
         }
         try {
             var emailAddress = new InternetAddress(user.getEmail());
@@ -44,11 +44,11 @@ public class UserValidator implements Validator {
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
         if (user.getPassword().length() < 6 || user.getPassword().length() > 32) {
-            errors.rejectValue("password", "Size.userForm.password");
+            errors.rejectValue("password", "password have to be longer then 6 and shorter then 32");
         }
 
         if (!user.getConfirmPassword().equals(user.getPassword())) {
-            errors.rejectValue("confirmPassword", "Diff.userForm.confirmPassword");
+            errors.rejectValue("confirmPassword", "passwords are not confirm");
         }
     }
 }
