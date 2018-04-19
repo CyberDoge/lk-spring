@@ -45,7 +45,6 @@ public class RegisterController {
             redir.addFlashAttribute("errors", errors);
             return "redirect:/register";
         }
-
         userForm.setConfirmationToken(UUID.randomUUID().toString());
 
         userService.save(userForm);
@@ -80,7 +79,7 @@ public class RegisterController {
             modelAndView.setViewName("welcome");
             return modelAndView;
         } else {
-            user.setEnable(true);
+            user.setEnable(1);
             modelAndView.addObject("user", user);
             userService.save(user);
         }

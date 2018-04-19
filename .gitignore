@@ -51,4 +51,6 @@ hs_err_pid*
 
 #email password and address
 application.properties
+*.properties
 /lk-spring/src/main/resources/application.properties
+src/main/resources/application.properties

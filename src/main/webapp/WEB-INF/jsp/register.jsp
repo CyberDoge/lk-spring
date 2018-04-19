@@ -17,7 +17,7 @@
 
 --%>
 
-<form:form modelAttribute="userForm" method="post" style="border:1px solid #ccc">
+<form:form modelAttribute="userForm" method="post">
 
     <c:if test="${not empty errors}">
     <ul>
