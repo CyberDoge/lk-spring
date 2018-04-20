@@ -19,9 +19,10 @@ public class MainController {
 
     @GetMapping("/")
     public ModelAndView welcome() {
-        return new ModelAndView("welcome", "message", "text");
+        return new ModelAndView("home", "message", "text");
     }
 
+/*
 
     @RequestMapping(value="/user/profile", method = RequestMethod.GET)
     public ModelAndView home(){
@@ -33,5 +34,6 @@ public class MainController {
         modelAndView.setViewName("admin/home");
         return modelAndView;
     }
+*/
 
 }

@@ -81,7 +81,7 @@ public class RegisterController {
         } else {
             user.setEnable(1);
             modelAndView.addObject("user", user);
-            userService.save(user);
+            userService.update(user);
         }
         modelAndView.setViewName("home");
         return modelAndView;

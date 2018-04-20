@@ -18,7 +18,7 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 @Service("userService")
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
@@ -34,6 +34,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setMiddleAttempt(0d);
         Role userRole = roleRepository.findByRole("USER");
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
+        userRepository.save(user);
+    }
+
+    @Override
+    public void update(User user) {
+        Role userRole = roleRepository.findByRole("USER");
+
+        user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
+
         userRepository.save(user);
     }
 
@@ -56,26 +65,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User findByConfirmationToken(String token) {
         return userRepository.findByConfirmationToken(token);
-    }
-
-
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(userName);
-        List<GrantedAuthority> authorities = getUserAuthority(user.getRoles());
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.getEnable() > 0, true, true, true, authorities);
-
-    }
-
-    private List<GrantedAuthority> getUserAuthority(Set<Role> userRoles) {
-        Set<GrantedAuthority> roles = new HashSet<>();
-        for (Role role : userRoles) {
-            roles.add(new SimpleGrantedAuthority(role.getRole()));
-        }
-
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>(roles);
-        return grantedAuthorities;
     }
 
 
