@@ -24,12 +24,10 @@ public class MainController {
 
     @RequestMapping(value = "/user/**", method = RequestMethod.GET)
     public ModelAndView adminPage() {
-
         ModelAndView model = new ModelAndView();
         model.addObject("title", "Spring Security Remember Me");
         model.addObject("message", "This page is for ROLE_USER only!");
         model.setViewName("/user/profile");
-
         return model;
 
     }
