@@ -1,13 +1,12 @@
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>login</title>
     <link href="css/register.css"
           rel="stylesheet">
 
 </head>
-<c:url value="/j_spring_security_check" var="loginUrl" />
 
-<form action="${loginUrl}" modelAttribute="userForm" method="post" >
+<form th:action="@{/login}" method="post">
     <div class="container">
         <h1>Sign In</h1>
         <p>Enter to your account.</p>
@@ -20,7 +19,7 @@
         <input type="password" placeholder="Enter Password" name="j_password" id="password" required>
 
         <label>
-            <input type="checkbox" checked="checked" name="_spring_security_remember_me" style="margin-bottom:15px"> Remember me
+            <input type="checkbox" checked="checked" name="remember-me”" style="margin-bottom:15px"> Remember me
         </label>
 
         <p><a href="#" style="color:dodgerblue">Forgot password?</a>.</p>

@@ -11,6 +11,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 
@@ -50,27 +54,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-
         http.
-                authorizeRequests().antMatchers("/", "/**", "/login", "/register").permitAll();
-        http.
-                authorizeRequests()
-                .antMatchers("/user/**").access("hasRole('ROLE_USER')");
-
-
-        http.authorizeRequests().and().formLogin()
-                .loginPage("/login")
-//                .loginProcessingUrl("/j_spring_security_check")
-                .failureUrl("/login?error=true")
-                .usernameParameter("j_username")
-                .passwordParameter("j_password").permitAll();
-
-        http.logout()
-                .permitAll()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/user/profile").and().exceptionHandling()
-                .accessDeniedPage("/");
+                authorizeRequests().antMatchers("/", "/login**", "/register**").permitAll()
+                .and()
+                .authorizeRequests()
+                    .antMatchers("/user/**").access("hasRole('USER')")
+                //.anyRequest().hasAnyRole("ROLE_ADMIN", "ROLE_USER")
+                .and()
+                    .formLogin().loginPage("/login").permitAll()
+                    .failureUrl("/login?error=true").permitAll()
+                    .usernameParameter("j_username")
+                    .passwordParameter("j_password")
+                .and()
+                    .logout()
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutSuccessUrl("/login?logout")
+                            .permitAll()
+                .and()
+                    .rememberMe().rememberMeParameter("remember-me").tokenRepository(persistentTokenRepository())
+                .and()
+                .csrf().disable();
     }
 
     @Override
@@ -78,6 +83,23 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         web
                 .ignoring()
                 .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
+    }
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl db = new JdbcTokenRepositoryImpl();
+        db.setDataSource(dataSource);
+        return db;
+    }
+
+    @Bean
+    public SavedRequestAwareAuthenticationSuccessHandler
+    savedRequestAwareAuthenticationSuccessHandler() {
+
+        SavedRequestAwareAuthenticationSuccessHandler auth
+                = new SavedRequestAwareAuthenticationSuccessHandler();
+        auth.setTargetUrlParameter("targetUrl");
+        return auth;
     }
 
     @Bean

@@ -22,11 +22,4 @@ public class LoginController {
         return "login";
     }
 
-    /*@RequestMapping(value = {"/user/home", "/user/profile"}, method = RequestMethod.POST)
-    public ModelAndView login(@ModelAttribute("userForm") User userForm) {
-        User checkUser = userService.findByUsernameAndPassword(userForm.getUsername(), userForm.getPassword());
-        if (checkUser == null)
-            return new ModelAndView("login", "error_message", "login or password are incorrect");
-        return new ModelAndView("user/profile", "user", checkUser);
-    }*/
 }
