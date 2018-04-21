@@ -2,7 +2,9 @@ package com.example.lkspring.controller;
 
 
 import com.example.lkspring.model.User;
+import com.example.lkspring.repository.TokenRepository;
 import com.example.lkspring.sevice.EmailService;
+import com.example.lkspring.sevice.TokenService;
 import com.example.lkspring.sevice.UserService;
 import com.example.lkspring.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +26,11 @@ import java.util.UUID;
 @Controller
 public class RegisterController {
     @Autowired
-    UserValidator userValidator;
+    private UserValidator userValidator;
     @Autowired
-    UserService userService;
+    private TokenService tokenService;
+    @Autowired
+    private UserService userService;
     @Autowired
     private EmailService emailService;
 
@@ -45,10 +49,11 @@ public class RegisterController {
             redir.addFlashAttribute("errors", errors);
             return "redirect:/register";
         }
-        userForm.setConfirmationToken(UUID.randomUUID().toString());
 
+        String confirmationToken =  UUID.randomUUID().toString();
         userService.save(userForm);
 
+        tokenService.save(userForm.getId(), confirmationToken);
         String appUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getLocalPort();
 
 
@@ -56,7 +61,7 @@ public class RegisterController {
         registrationEmail.setTo(userForm.getEmail());
         registrationEmail.setSubject("Registration Confirmation");
         registrationEmail.setText("To confirm your e-mail address, please click the link below:\n"
-                + appUrl + "/confirm?token=" + userForm.getConfirmationToken());
+                + appUrl + "/confirm?token=" + confirmationToken);
 
         emailService.sendEmail(registrationEmail);
         redir.addFlashAttribute("user", userForm);
@@ -72,7 +77,7 @@ public class RegisterController {
     @RequestMapping(value = "/confirm", method = RequestMethod.GET)
     public ModelAndView showConfirmationPage(ModelAndView modelAndView, @RequestParam("token") String token) {
 
-        User user = userService.findByConfirmationToken(token);
+        User user = userService.findById(tokenService.findUserIdByConfirmationToken(token));
 
         if (user == null) {
             modelAndView.addObject("invalidToken", "Oops!  This is an invalid confirmation link.");
@@ -81,6 +86,7 @@ public class RegisterController {
         } else {
             user.setEnable(1);
             modelAndView.addObject("user", user);
+            tokenService.delete(user.getId());
             userService.update(user);
         }
         modelAndView.setViewName("home");

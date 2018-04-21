@@ -6,7 +6,7 @@ import java.util.Set;
 @Entity
 @Table(name = "user")
 public class User {
-    private Long id;
+    private Integer id;
 
     private int enable;
     private String username;
@@ -15,18 +15,9 @@ public class User {
     private String confirmPassword;
     private Double middleAttempt;
 
-    private String confirmationToken;
 
     private Set<Role> roles;
 
-    @Column(name = "confirmation_token")
-    public String getConfirmationToken() {
-        return confirmationToken;
-    }
-
-    public void setConfirmationToken(String confirmationToken) {
-        this.confirmationToken = confirmationToken;
-    }
 
     @Column(columnDefinition = "BIT", length = 1)
     public int getEnable() {
@@ -40,11 +31,11 @@ public class User {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -22,18 +22,9 @@ public class MainController {
         return new ModelAndView("home", "message", "text");
     }
 
-/*
-
-    @RequestMapping(value="/user/profile", method = RequestMethod.GET)
-    public ModelAndView home(){
-        ModelAndView modelAndView = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findByUsername(auth.getName());
-        modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
-        modelAndView.addObject("user", user);
-        modelAndView.setViewName("admin/home");
-        return modelAndView;
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public String goHome(){
+        return "/user/profile";
     }
-*/
 
 }
