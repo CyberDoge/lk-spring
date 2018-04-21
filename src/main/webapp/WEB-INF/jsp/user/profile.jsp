@@ -6,11 +6,15 @@
 <body>
 <h1>Title : ${title}</h1>
 <h1>Message : ${message}</h1>
+<h1>Username : ${user.getUsername()}</h1>
 
-<c:url value="/login?logut" var="logoutUrl" />
+<c:url value="/login?logout" var="logoutUrl" />
 <form action="${logoutUrl}" method="post" id="logoutForm">
     <input type="hidden" name="${_csrf.parameterName}"
            value="${_csrf.token}" />
+</form>
+<form th:action="@{/game}" method="post">
+    <a href="/user/game">play game!!!</a>
 </form>
 <script>
     function formSubmit() {
@@ -18,12 +22,7 @@
     }
 </script>
 
-<c:if test="${pageContext.request.userPrincipal.name != null}">
-    <h2>
-        Welcome : ${pageContext.request.userPrincipal.name} | <a
-            href="javascript:formSubmit()"> Logout</a>
-    </h2>
-</c:if>
+
 
 
 

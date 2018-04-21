@@ -58,22 +58,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 authorizeRequests().antMatchers("/", "/login**", "/register**").permitAll()
                 .and()
                 .authorizeRequests()
-                    .antMatchers("/user/**").access("hasRole('USER')")
-                //.anyRequest().hasAnyRole("ROLE_ADMIN", "ROLE_USER")
+                .antMatchers("/user/**").access("hasRole('USER')")
                 .and()
-                    .formLogin().loginPage("/login").permitAll()
-                    .failureUrl("/login?error=true").permitAll()
-                    .usernameParameter("j_username")
-                    .passwordParameter("j_password")
+                .formLogin().loginPage("/login").permitAll()
+                .failureUrl("/login?error=true").permitAll()
+                .usernameParameter("j_username")
+                .passwordParameter("j_password")
                 .and()
-                    .logout()
-                        .invalidateHttpSession(true)
-                        .clearAuthentication(true)
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutSuccessUrl("/login?logout")
-                            .permitAll()
+                .logout()
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login?logout")
+                .permitAll()
                 .and()
-                    .rememberMe().rememberMeParameter("remember-me").tokenRepository(persistentTokenRepository())
+                .rememberMe().rememberMeParameter("remember-me").tokenRepository(persistentTokenRepository())
                 .and()
                 .csrf().disable();
     }
@@ -82,7 +81,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web
                 .ignoring()
-                .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
+                .antMatchers("/resources/**", "/static/**", "/css/**", "/static/js/**", "/images/**");
     }
 
     @Bean
