@@ -4,9 +4,9 @@
 <%@page session="true"%>
 <html>
 <body>
-<h1>Title : ${title}</h1>
-<h1>Message : ${message}</h1>
-<h1>Username : ${user.getUsername()}</h1>
+welcome to your profile, ${user.getUsername()}
+<br/>
+your current max score: ${user.getMaxScore()}
 
 <c:url value="/login?logout" var="logoutUrl" />
 <form action="${logoutUrl}" method="post" id="logoutForm">

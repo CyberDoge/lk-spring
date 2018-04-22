@@ -20,7 +20,7 @@ public class MainController {
         return new ModelAndView("home", "message", "text");
     }
 
-    @RequestMapping(value = "/user/", method = RequestMethod.GET)
+    @RequestMapping(value = {"/user/", "/user/home", "/user/profile"}, method = RequestMethod.GET)
     public ModelAndView adminPage() {
         ModelAndView model = new ModelAndView();
         model.addObject("title", "Spring Security Remember Me");
@@ -37,13 +37,18 @@ public class MainController {
     }
 
     @PostMapping(value = "/user/endGame")
-    public void postCustomer(@RequestBody User user) {
-        User postUser = userService.findByUsername(user.getUsername());
+    public void endGame(@RequestBody User user) {
+        var postUser = userService.findByUsername(user.getUsername());
         if(postUser.getMaxScore() < user.getMaxScore()){
             postUser.setMaxScore(user.getMaxScore());
             userService.update(postUser);
         }
         return;
+    }
+    @RequestMapping(value = "top", method = RequestMethod.GET)
+    public ModelAndView printTop(){
+        var list =  userService.top10MaxScore();
+        return new ModelAndView("top", "list", list);
     }
 
 }

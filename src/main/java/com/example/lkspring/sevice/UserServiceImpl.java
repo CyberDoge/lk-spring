@@ -65,5 +65,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).get();
     }
 
+    @Override
+    public List<User> top10MaxScore() {
+        return userRepository.findTop10ByOrderByMaxScore();
+    }
+
 
 }

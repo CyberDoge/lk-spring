@@ -49,7 +49,7 @@ public class RegisterController {
             return "redirect:/register";
         }
 
-        String confirmationToken =  UUID.randomUUID().toString();
+        var confirmationToken =  UUID.randomUUID().toString();
         userService.save(userForm);
 
         tokenService.save(userForm.getId(), confirmationToken);
@@ -76,7 +76,7 @@ public class RegisterController {
     @RequestMapping(value = "/confirm", method = RequestMethod.GET)
     public ModelAndView showConfirmationPage(ModelAndView modelAndView, @RequestParam("token") String token) {
 
-        User user = userService.findById(tokenService.findUserIdByConfirmationToken(token));
+        var user = userService.findById(tokenService.findUserIdByConfirmationToken(token));
 
         if (user == null) {
             modelAndView.addObject("invalidToken", "Oops!  This is an invalid confirmation link.");
