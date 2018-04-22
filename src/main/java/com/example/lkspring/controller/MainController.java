@@ -3,16 +3,11 @@ package com.example.lkspring.controller;
 import com.example.lkspring.model.User;
 import com.example.lkspring.sevice.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.security.Principal;
 
 @Controller
 public class MainController {
@@ -30,15 +25,25 @@ public class MainController {
         ModelAndView model = new ModelAndView();
         model.addObject("title", "Spring Security Remember Me");
         model.addObject("message", "This page is for ROLE_USER only!");
-        model.addObject("user",         SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        model.addObject("user", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         model.setViewName("/user/profile");
         return model;
     }
 
     @RequestMapping(value = "/user/game", method = RequestMethod.GET)
-    public String playGame() {
+    public String playGame(Model user) {
+        user.addAttribute("user", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return "/user/game";
     }
 
+    @PostMapping(value = "/user/endGame")
+    public void postCustomer(@RequestBody User user) {
+        User postUser = userService.findByUsername(user.getUsername());
+        if(postUser.getMaxScore() < user.getMaxScore()){
+            postUser.setMaxScore(user.getMaxScore());
+            userService.update(postUser);
+        }
+        return;
+    }
 
 }

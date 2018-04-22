@@ -6,6 +6,7 @@ import java.util.Set;
 @Entity
 @Table(name = "user")
 public class User {
+
     private Integer id;
 
     private int enable;
@@ -13,10 +14,11 @@ public class User {
     private String email;
     private String password;
     private String confirmPassword;
-    private Double middleAttempt;
+    private Integer maxScore;
 
 
     private Set<Role> roles;
+    public User(){}
 
 
     @Column(columnDefinition = "BIT", length = 1)
@@ -73,13 +75,13 @@ public class User {
         this.confirmPassword = confirmPassword;
     }
 
-    @Column(name = "middle_attempt")
-    public Double getMiddleAttempt() {
-        return middleAttempt;
+    @Column(name = "max_score")
+    public Integer getMaxScore() {
+        return maxScore;
     }
 
-    public void setMiddleAttempt(Double middleAttempt) {
-        this.middleAttempt = middleAttempt;
+    public void setMaxScore(Integer maxScore) {
+        this.maxScore = maxScore;
     }
 
     @ManyToMany(cascade = CascadeType.ALL)

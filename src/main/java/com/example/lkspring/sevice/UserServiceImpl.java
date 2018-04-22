@@ -6,15 +6,9 @@ import com.example.lkspring.model.User;
 import com.example.lkspring.repository.RoleRepository;
 import com.example.lkspring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.*;
 
 @Service("userService")
@@ -31,7 +25,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setMiddleAttempt(0d);
+        user.setMaxScore(0);
         Role userRole = roleRepository.findByRole("USER");
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
         userRepository.save(user);
@@ -39,6 +33,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(User user) {
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateAfterConfirm(User user) {
         Role userRole = roleRepository.findByRole("USER");
 
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));

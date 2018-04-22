@@ -2,7 +2,6 @@ package com.example.lkspring.controller;
 
 
 import com.example.lkspring.model.User;
-import com.example.lkspring.repository.TokenRepository;
 import com.example.lkspring.sevice.EmailService;
 import com.example.lkspring.sevice.TokenService;
 import com.example.lkspring.sevice.UserService;
@@ -87,7 +86,7 @@ public class RegisterController {
             user.setEnable(1);
             modelAndView.addObject("user", user);
             tokenService.delete(user.getId());
-            userService.update(user);
+            userService.updateAfterConfirm(user);
         }
         modelAndView.setViewName("home");
         return modelAndView;
