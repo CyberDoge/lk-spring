@@ -1,7 +1,67 @@
-h1{
-    color:#0000FF;
+h1 {
+    color: black;
+    font-size: 1.8em;
 }
 
-h2{
-    color:#FF0000;
+h2 {
+    color: #FF0000;
+}
+
+header {
+    margin-top: 0px;
+    position: center;
+    display: block;
+    height: 105px;
+    font-size: 20px;
+    background-color: #dddddd;
+}
+table {
+    width: 300px;
+    margin: auto;
+}
+
+body {
+    font: 0.9em/1.2 Arial, Helvetica, sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    text-align: center;
+    background-color: #f1f1f1;
+}
+
+a {
+    color: #1b75bc;
+}
+
+a:hover {
+    color: #d6562b;
+}
+
+a img {
+    border: none;
+}
+
+section h1 {
+    font-size: 1.5em;
+    font-weight: normal;
+    margin-bottom: 0;
+}
+
+.hide {
+    color: transparent;
+    -webkit-text-stroke: 1px blue;
+    text-stroke: 1px black;
+    font-size: 1.5em;
+}
+
+.main {
+    margin-top: 70px;
+}
+
+tr {
+    list-style-type: square;
+}
+
+td {
+    list-style-type: lower-alpha;
 }

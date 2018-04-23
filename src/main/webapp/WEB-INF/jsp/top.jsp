@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-
+    <link href="css/main.css" rel="stylesheet">
     <title>Top results</title>
 </head>
 <body>

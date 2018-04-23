@@ -23,9 +23,10 @@ public class MainController {
     @RequestMapping(value = {"/user/", "/user/home", "/user/profile"}, method = RequestMethod.GET)
     public ModelAndView adminPage() {
         ModelAndView model = new ModelAndView();
-        model.addObject("title", "Spring Security Remember Me");
-        model.addObject("message", "This page is for ROLE_USER only!");
-        model.addObject("user", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        var user = (org.springframework.security.core.userdetails.User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addObject("user", user);
+        var score = userService.findByUsername(user.getUsername()).getMaxScore();
+        model.addObject("score", score);
         model.setViewName("/user/profile");
         return model;
     }

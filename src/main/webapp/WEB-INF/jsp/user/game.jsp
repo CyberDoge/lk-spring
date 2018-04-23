@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -893,6 +893,6 @@
 <h3>author: <a href="https://github.com/betamos/Snake-JS">github source</a></h3>
 <br/>
 </p>
-
+<a href="/user/profile">home</a>
 </body>
 </html>

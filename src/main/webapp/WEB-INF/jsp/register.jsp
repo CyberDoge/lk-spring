@@ -13,9 +13,6 @@
 <p>Please fill in this form to create an account.</p>
 <hr>
 
-<%--
-
---%>
 
 <form:form modelAttribute="userForm" method="post">
 
