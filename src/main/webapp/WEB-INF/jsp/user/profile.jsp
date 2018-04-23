@@ -16,7 +16,7 @@
 <body>
 <h2>welcome to your profile, ${user.getUsername()}</h2>
 <br/>
-<h2>your current max score: ${score}</h2>
+<h2>your current max score: ${user.getMaxScore()}</h2>
 <form th:th:action="@{user/game}" method="post">
     <a href="/user/game">play game!!!</a>
 </form>

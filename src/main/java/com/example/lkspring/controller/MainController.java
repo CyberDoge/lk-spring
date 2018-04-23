@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class MainController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @GetMapping("/")
     public ModelAndView welcome() {
@@ -21,14 +21,25 @@ public class MainController {
     }
 
     @RequestMapping(value = {"/user/", "/user/home", "/user/profile"}, method = RequestMethod.GET)
-    public ModelAndView adminPage() {
+    public ModelAndView userPage() {
         ModelAndView model = new ModelAndView();
-        var user = (org.springframework.security.core.userdetails.User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var userDet = (org.springframework.security.core.userdetails.User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var user = userService.findByUsername(userDet.getUsername());
         model.addObject("user", user);
-        var score = userService.findByUsername(user.getUsername()).getMaxScore();
-        model.addObject("score", score);
         model.setViewName("/user/profile");
         return model;
+    }
+
+    @RequestMapping(value = "/user/edit", method = RequestMethod.GET)
+    public ModelAndView editPage(){
+        var user = userService.findByUsername(((org.springframework.security.core.userdetails.User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());
+        var mov =  new ModelAndView("/user/edit", "name", user.getUsername());
+        mov.addObject("email", user.getEmail());
+        return mov;
+    }
+    @RequestMapping(value = "/user/edit", method = RequestMethod.POST)
+    public ModelAndView endEditing(){
+        return null;
     }
 
     @RequestMapping(value = "/user/game", method = RequestMethod.GET)
@@ -51,5 +62,4 @@ public class MainController {
         var list =  userService.top10MaxScore();
         return new ModelAndView("top", "list", list);
     }
-
 }
