@@ -8,8 +8,8 @@
 <body>
 <c:if test="${not empty errors}">
     <ul>
-        <c:forEach var="errorElement" items="${errors.getAllErrors()}">
-            <li>${errorElement.getCode()}</li>
+        <c:forEach var="errorElement" items="${errors}">
+            <li>${errorElement}</li>
         </c:forEach>
     </ul>
 </c:if>
