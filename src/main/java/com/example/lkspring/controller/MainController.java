@@ -77,9 +77,12 @@ public class MainController {
         }
 
         user.setUsername(request.getParameter("username"));
-        user.setPassword(bCryptPasswordEncoder.encode(request.getParameter("new_password")));
+        var pass = request.getParameter("new_password");
+        if (pass.length() != 0)
+            user.setPassword(bCryptPasswordEncoder.encode(request.getParameter("new_password")));
+        else pass = request.getParameter("old_password");
         userService.update(user);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), request.getParameter("new_password"));
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), pass);
         Authentication result = authenticationManager.authenticate(authentication);
         SecurityContextHolder.getContext().setAuthentication(result);
         return "redirect:/user/home";

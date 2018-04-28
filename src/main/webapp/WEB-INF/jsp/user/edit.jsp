@@ -17,13 +17,13 @@
     <label for="username">username:</label>
     <input type="text" id="username" name="username" placeholder="username" value="${name}"/>
     <br/>
-    <label for="old_password">old password:</label>
+    <label for="old_password">old password (necessarily):</label>
     <input type="password" id="old_password" name="old_password" placeholder="old password"/>
     <br/>
-    <label for="new_password">new password:</label>
+    <label for="new_password">new password (not necessary):</label>
     <input type="password" id="new_password" name="new_password" placeholder="new password"/>
     <br/>
-    <label for="confirm_password">confirm password:</label>
+    <label for="confirm_password">confirm password (not necessary):</label>
     <input type="password" id="confirm_password" name="confirm_password" placeholder="confirm password"/>
     <br/>
     <button type="submit">Edit</button></form:form>
