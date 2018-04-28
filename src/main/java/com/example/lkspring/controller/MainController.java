@@ -1,20 +1,21 @@
 package com.example.lkspring.controller;
 
+import com.example.lkspring.model.User;
 import com.example.lkspring.sevice.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,8 @@ public class MainController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @GetMapping("/")
     public ModelAndView welcome() {
@@ -59,8 +62,9 @@ public class MainController {
     @RequestMapping(value = "/user/edit", method = RequestMethod.POST)
     public String endEditing(HttpServletRequest request, RedirectAttributes redir) {
         List<String> errors = new ArrayList<>();
-        var user = userService.findByUsernameAndPassword(getUser().getUsername(), bCryptPasswordEncoder.encode(request.getParameter("old_password")));
-        if (user == null) errors.add("wrong password");
+        var user = userService.findByUsername(getUser().getUsername());
+        if (!bCryptPasswordEncoder.matches(request.getParameter("old_password"), user.getPassword()))
+            errors.add("wrong password");
         if (userService.findByUsername(request.getParameter("name")) != null)
             errors.add("this username is already taken");
         if (request.getParameter("new_password").length() != 0 && request.getParameter("new_password").length() > 6 && request.getParameter("new_password").length() < 32)
@@ -71,14 +75,18 @@ public class MainController {
             redir.addFlashAttribute("errors", errors);
             return "redirect:/user/edit";
         }
-        user.setUsername(request.getParameter("name"));
+
+        user.setUsername(request.getParameter("username"));
         user.setPassword(bCryptPasswordEncoder.encode(request.getParameter("new_password")));
         userService.update(user);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUsername(), request.getParameter("new_password"));
+        Authentication result = authenticationManager.authenticate(authentication);
+        SecurityContextHolder.getContext().setAuthentication(result);
         return "redirect:/user/home";
     }
 
     @PostMapping(value = "/user/endGame")
-    public void endGame(@RequestBody com.example.lkspring.model.User user) {
+    public void endGame(@RequestBody User user) {
         var postUser = userService.findByUsername(user.getUsername());
         if (postUser.getMaxScore() < user.getMaxScore()) {
             postUser.setMaxScore(user.getMaxScore());
@@ -93,7 +101,7 @@ public class MainController {
         return new ModelAndView("top", "list", list);
     }
 
-    private User getUser() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    private UserDetails getUser() {
+        return (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

@@ -23,7 +23,7 @@
     <label for="new_password">new password:</label>
     <input type="password" id="new_password" name="new_password" placeholder="new password"/>
     <br/>
-    <label for="confirm_password">new password:</label>
+    <label for="confirm_password">confirm password:</label>
     <input type="password" id="confirm_password" name="confirm_password" placeholder="confirm password"/>
     <br/>
     <button type="submit">Edit</button></form:form>
