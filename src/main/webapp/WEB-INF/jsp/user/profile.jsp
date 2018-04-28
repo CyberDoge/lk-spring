@@ -20,7 +20,9 @@
 <form th:th:action="@{user/game}" method="post">
     <a href="/user/game">play game!!!</a>
 </form>
-<a href="<c:url value="/login?logout" />">Logout</a>
+<a href="/user/edit">edit</a>
+<br />
+<a href="/login?logout">Logout</a>
 
 </form>
 </body>
