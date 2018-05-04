@@ -52,15 +52,15 @@ public class MainController {
     }
 
     @RequestMapping(value = "/user/edit", method = RequestMethod.GET)
-    public ModelAndView editPage(ModelAndView mov, RedirectAttributes redir) {
+    public ModelAndView editPage(ModelAndView mov, @RequestParam(value = "errors", required = false) List<String> errors) {
         mov.addObject("name", getUser().getUsername());
         mov.setViewName("/user/edit");
-        mov.addObject("errors", redir.getFlashAttributes().get("errors"));
+        mov.addObject("errors", errors);
         return mov;
     }
 
     @RequestMapping(value = "/user/edit", method = RequestMethod.POST)
-    public String endEditing(HttpServletRequest request, RedirectAttributes redir) {
+    public String endEditing(HttpServletRequest request, final RedirectAttributes redirect) {
         List<String> errors = new ArrayList<>();
         var user = userService.findByUsername(getUser().getUsername());
         if (!bCryptPasswordEncoder.matches(request.getParameter("old_password"), user.getPassword()))
@@ -72,7 +72,11 @@ public class MainController {
         if (request.getParameter("new_password").length() != 0 && !request.getParameter("confirm_password").equals(request.getParameter("new_password")))
             errors.add("the password are not confirm");
         if (!errors.isEmpty()) {
-            redir.addFlashAttribute("errors", errors);
+            redirect.addAttribute("errors", errors);
+           /* redir.addFlashAttribute(errors);
+            redir.addAttribute("errors", errors);
+            redir.addAttribute( errors);*/
+
             return "redirect:/user/edit";
         }
 

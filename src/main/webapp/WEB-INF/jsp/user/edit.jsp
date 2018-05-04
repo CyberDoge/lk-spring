@@ -5,11 +5,15 @@
 <head>
     <title>Edit profile</title>
     <style>
+        .container {
+            position: center;
+            margin-left: 30%;
+        }
         body {font-family: Arial, Helvetica, sans-serif;}
         * {box-sizing: border-box}
         a {color: #1b75bc;}
         a:hover {color: #d6562b;}
-        body {position: center; text-align: center;}
+        body {position: center;}
         input[type=text], input[type=password] {
             padding: 15px;
             margin: 5px 0 22px 0;
